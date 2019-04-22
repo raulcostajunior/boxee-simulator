@@ -1,5 +1,9 @@
 #include "main_window.h"
-#include "ui_MainWindow.h"
+#include "ui_main_window.h"
+
+#include "dto/net_message.h"
+
+using namespace gui;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

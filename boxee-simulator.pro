@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = boxee-simulator
+TARGET = "Boxee Simulator"
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,16 +26,17 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        main_window.cpp \
-        sim/boxee.cpp
+        gui/main_window.cpp \
+        core/boxee.cpp
 
 HEADERS += \
-        main_window.h \
-        sim/boxee.h \
-        sim/boxee_net_server.h
+        dto/net_message.h \
+        gui/main_window.h \
+        core/boxee.h \
+        core/boxee_net_server.h
 
 FORMS += \
-    main_window.ui
+    gui/main_window.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

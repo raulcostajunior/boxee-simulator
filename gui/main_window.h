@@ -7,6 +7,8 @@ namespace Ui {
 class MainWindow;
 }
 
+namespace gui {
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -18,5 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
 };
+
+} // namespace gui
 
 #endif // MAIN_WINDOW_H

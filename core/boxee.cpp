@@ -1,6 +1,6 @@
 #include "boxee.h"
 
-using namespace sim;
+using namespace core;
 
 Boxee &Boxee::instance()
 {

@@ -1,9 +1,11 @@
 #ifndef BOXEE_H
 #define BOXEE_H
 
-namespace sim {
+#include <cstdint>
 
-enum class BoxeeState {
+namespace core {
+
+enum class BoxeeState : uint8_t {
     OFF, // Powered off.
     BOOTING,
     ON_STANDARD,   // On and in standard mode (neither playing media nor handling text input).
@@ -12,7 +14,7 @@ enum class BoxeeState {
     SHUTTING_DOWN
 };
 
-enum class BoxeeMediaType {
+enum class BoxeeMediaType : uint8_t {
     NONE, // No media playing (while not in playing mode).
     AUDIO,
     VIDEO,
@@ -34,6 +36,6 @@ private:
     Boxee &operator=(const Boxee &&) = delete;
 };
 
-} // namespace sim
+} // namespace core
 
 #endif // BOXEE_H
