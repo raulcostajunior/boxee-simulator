@@ -1,6 +1,7 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include <QLabel>
 #include <QMainWindow>
 
 namespace Ui {
@@ -19,6 +20,14 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QLabel *lblLogEntries;
+    QLabel *lblBoxeeState;
+
+    void initIconsTheme();
+    void initActions();
+    void initToolbar();
+    void initStatusBar();
 };
 
 } // namespace gui
