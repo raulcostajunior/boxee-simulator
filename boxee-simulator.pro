@@ -44,6 +44,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    app_icons.qrc
+    images.qrc
 
 QMAKE_INFO_PLIST = macosx/Info.plist

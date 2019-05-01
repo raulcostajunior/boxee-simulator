@@ -24,9 +24,7 @@ private:
     QLabel *lblLogEntries;
     QLabel *lblBoxeeState;
 
-    void initIconsTheme();
     void initActions();
-    void initToolbar();
     void initStatusBar();
 };
 

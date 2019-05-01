@@ -23,6 +23,9 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
+   </property>
    <widget class="QMenu" name="menuBoxee_Simulator">
     <property name="title">
      <string>Boxee</string>
@@ -70,6 +73,12 @@
    <property name="movable">
     <bool>false</bool>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
    <property name="floatable">
     <bool>false</bool>
    </property>
@@ -79,6 +88,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionPower_On_Off"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAbout_Qt">
@@ -98,8 +108,18 @@
    </property>
   </action>
   <action name="actionPower_On_Off">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/power-off.png</normaloff>:/images/power-off.png</iconset>
+   </property>
    <property name="text">
     <string>Power On/Off</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionRestart">
@@ -170,6 +190,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../images.qrc"/>
+ </resources>
  <connections/>
 </ui>
