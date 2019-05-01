@@ -36,6 +36,7 @@ void MainWindow::initActions()
     connect(ui->actionAbout_Qt, &QAction::triggered, []() { qApp->aboutQt(); });
 
     ui->actionPower_On_Off->setIcon(QIcon::fromTheme("system-shutdown"));
+    ui->actionPower_On_Off->setStatusTip(tr("Power simulated Boxee on or off."));
 }
 
 void MainWindow::initToolbar()
@@ -48,9 +49,7 @@ void MainWindow::initToolbar()
 
 void MainWindow::initStatusBar()
 {
-    lblBoxeeState = new QLabel("OFF");
-    lblLogEntries = new QLabel("No data log entries");
-
-    ui->statusBar->addPermanentWidget(lblLogEntries);
+    lblBoxeeState = new QLabel("Shutting down");
+    lblBoxeeState->setMinimumSize(lblBoxeeState->sizeHint());
     ui->statusBar->addPermanentWidget(lblBoxeeState);
 }
