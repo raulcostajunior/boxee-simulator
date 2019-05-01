@@ -45,3 +45,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     app_icons.qrc
+
+QMAKE_INFO_PLIST = macosx/Info.plist
