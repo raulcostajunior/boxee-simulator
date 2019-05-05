@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>687</width>
-    <height>416</height>
+    <width>764</width>
+    <height>542</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>687</width>
+     <width>764</width>
      <height>22</height>
     </rect>
    </property>
@@ -31,14 +31,16 @@
      <string>Boxee</string>
     </property>
     <addaction name="actionPower_On_Off"/>
-    <addaction name="actionRestart"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
     <addaction name="actionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuData_Log">
+   <widget class="QMenu" name="menuComm_Log">
     <property name="title">
-     <string>Data Log</string>
+     <string>Communication Log</string>
+    </property>
+    <property name="separatorsCollapsible">
+     <bool>false</bool>
     </property>
     <addaction name="actionClear"/>
     <addaction name="actionSave_As"/>
@@ -54,8 +56,11 @@
     <addaction name="actionDown"/>
     <addaction name="actionLeft"/>
     <addaction name="separator"/>
-    <addaction name="actionAccept_Text"/>
-    <addaction name="actionDismiss_Text"/>
+    <addaction name="actionEnter"/>
+    <addaction name="separator"/>
+    <addaction name="actionMenu"/>
+    <addaction name="separator"/>
+    <addaction name="actionInput_Text"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -65,7 +70,7 @@
     <addaction name="actionAbout_Boxee_Simulator"/>
    </widget>
    <addaction name="menuBoxee_Simulator"/>
-   <addaction name="menuData_Log"/>
+   <addaction name="menuComm_Log"/>
    <addaction name="menuVirtual_Remote"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -75,8 +80,8 @@
    </property>
    <property name="iconSize">
     <size>
-     <width>24</width>
-     <height>24</height>
+     <width>25</width>
+     <height>25</height>
     </size>
    </property>
    <property name="floatable">
@@ -88,9 +93,63 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="separator"/>
    <addaction name="actionPower_On_Off"/>
+   <addaction name="separator"/>
+   <addaction name="actionPlay_Pause"/>
+   <addaction name="separator"/>
+   <addaction name="actionLeft"/>
+   <addaction name="actionUp"/>
+   <addaction name="actionDown"/>
+   <addaction name="actionRight"/>
+   <addaction name="actionEnter"/>
+   <addaction name="separator"/>
+   <addaction name="actionMenu"/>
+   <addaction name="separator"/>
+   <addaction name="actionInput_Text"/>
+   <addaction name="separator"/>
+   <addaction name="actionSave_As"/>
+   <addaction name="actionClear"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget_2">
+   <property name="features">
+    <set>QDockWidget::NoDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Communication Log</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QTableView" name="tableView">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt</string>
@@ -110,9 +169,12 @@
   <action name="actionPower_On_Off">
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/images/power-off.png</normaloff>:/images/power-off.png</iconset>
+     <normaloff>:/images/power-on.png</normaloff>:/images/power-on.png</iconset>
    </property>
    <property name="text">
+    <string>Power On/Off</string>
+   </property>
+   <property name="toolTip">
     <string>Power On/Off</string>
    </property>
    <property name="shortcut">
@@ -123,11 +185,6 @@
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionRestart">
-   <property name="text">
-    <string>Restart</string>
    </property>
   </action>
   <action name="actionSettings">
@@ -147,48 +204,135 @@
    </property>
   </action>
   <action name="actionClear">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/clear-log.png</normaloff>:/images/clear-log.png</iconset>
+   </property>
    <property name="text">
     <string>Clear</string>
    </property>
+   <property name="toolTip">
+    <string>Clear Comm. Log</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionSave_As">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/save-as.png</normaloff>:/images/save-as.png</iconset>
+   </property>
    <property name="text">
     <string>Save As ...</string>
    </property>
+   <property name="toolTip">
+    <string>Save Comm. Log As...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionPlay_Pause">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
+   </property>
    <property name="text">
     <string>Play / Pause</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionUp">
+   <property name="icon">
+    <iconset>
+     <normalon>:/images/up.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Up</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionRight">
+   <property name="icon">
+    <iconset>
+     <normalon>:/images/right.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Right</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionDown">
+   <property name="icon">
+    <iconset>
+     <normalon>:/images/down.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Down</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionLeft">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/left.png</normaloff>:/images/left.png</iconset>
+   </property>
    <property name="text">
     <string>Left</string>
    </property>
-  </action>
-  <action name="actionAccept_Text">
-   <property name="text">
-    <string>Accept Text</string>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
-  <action name="actionDismiss_Text">
+  <action name="actionInput_Text">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/input-text.png</normaloff>:/images/input-text.png</iconset>
+   </property>
    <property name="text">
-    <string>Dismiss Text</string>
+    <string>Input text ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Input text...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionEnter">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/enter.png</normaloff>:/images/enter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Enter</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionMenu">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/menu.png</normaloff>:/images/menu.png</iconset>
+   </property>
+   <property name="text">
+    <string>Menu</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
  </widget>
