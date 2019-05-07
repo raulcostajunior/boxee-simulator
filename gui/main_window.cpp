@@ -38,7 +38,7 @@ void MainWindow::initLogPanel()
     toolbLog->setMovable(false);
     toolbLog->setFloatable(false);
     toolbLog->setIconSize(
-        QSize(ui->mainToolBar->iconSize().width(), ui->mainToolBar->iconSize().height()));
+        QSize(ui->mainToolBar->iconSize().width() - 6, ui->mainToolBar->iconSize().height() - 6));
     toolbLog->addAction(ui->actionSave_As);
     toolbLog->addAction(ui->actionClear);
     winLog->addToolBar(toolbLog);
