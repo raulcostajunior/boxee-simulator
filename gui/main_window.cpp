@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     initActions();
+    initLogPanel();
     initStatusBar();
 }
 
@@ -23,6 +24,29 @@ void MainWindow::initActions()
 {
     connect(ui->actionQuit, &QAction::triggered, [this]() { this->close(); });
     connect(ui->actionAbout_Qt, &QAction::triggered, []() { qApp->aboutQt(); });
+}
+
+void MainWindow::initLogPanel()
+{
+    dockLog = new QDockWidget(this);
+    dockLog->setWindowTitle(tr("Communication Log"));
+    dockLog->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockLog);
+
+    winLog = new QMainWindow(nullptr);
+    toolbLog = new QToolBar(winLog);
+    toolbLog->setMovable(false);
+    toolbLog->setFloatable(false);
+    toolbLog->setIconSize(
+        QSize(ui->mainToolBar->iconSize().width(), ui->mainToolBar->iconSize().height()));
+    toolbLog->addAction(ui->actionSave_As);
+    toolbLog->addAction(ui->actionClear);
+    winLog->addToolBar(toolbLog);
+
+    tblLog = new QTableView();
+    winLog->setCentralWidget(tblLog);
+    winLog->setParent(dockLog);
+    dockLog->setWidget(winLog);
 }
 
 void MainWindow::initStatusBar()

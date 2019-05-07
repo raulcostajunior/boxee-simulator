@@ -80,8 +80,8 @@
    </property>
    <property name="iconSize">
     <size>
-     <width>25</width>
-     <height>25</height>
+     <width>24</width>
+     <height>24</height>
     </size>
    </property>
    <property name="floatable">
@@ -93,7 +93,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="separator"/>
    <addaction name="actionPower_On_Off"/>
    <addaction name="separator"/>
    <addaction name="actionPlay_Pause"/>
@@ -107,49 +106,8 @@
    <addaction name="actionMenu"/>
    <addaction name="separator"/>
    <addaction name="actionInput_Text"/>
-   <addaction name="separator"/>
-   <addaction name="actionSave_As"/>
-   <addaction name="actionClear"/>
-   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="dockWidget_2">
-   <property name="features">
-    <set>QDockWidget::NoDockWidgetFeatures</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::BottomDockWidgetArea</set>
-   </property>
-   <property name="windowTitle">
-    <string>Communication Log</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>8</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
-    <layout class="QGridLayout" name="gridLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QTableView" name="tableView">
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt</string>
@@ -204,6 +162,9 @@
    </property>
   </action>
   <action name="actionClear">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../images.qrc">
      <normaloff>:/images/clear-log.png</normaloff>:/images/clear-log.png</iconset>
@@ -212,13 +173,16 @@
     <string>Clear</string>
    </property>
    <property name="toolTip">
-    <string>Clear Comm. Log</string>
+    <string>Clear Log</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
    </property>
   </action>
   <action name="actionSave_As">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../images.qrc">
      <normaloff>:/images/save-as.png</normaloff>:/images/save-as.png</iconset>
@@ -227,7 +191,7 @@
     <string>Save As ...</string>
    </property>
    <property name="toolTip">
-    <string>Save Comm. Log As...</string>
+    <string>Save Log As...</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>

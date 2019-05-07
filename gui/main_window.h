@@ -1,8 +1,10 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include <QDockWidget>
 #include <QLabel>
 #include <QMainWindow>
+#include <QTableView>
 
 namespace Ui {
 class MainWindow;
@@ -24,8 +26,14 @@ private:
     QLabel *lblLogEntries;
     QLabel *lblBoxeeState;
 
+    QDockWidget *dockLog;
+    QMainWindow *winLog;
+    QTableView *tblLog;
+    QToolBar *toolbLog;
+
     void initActions();
     void initStatusBar();
+    void initLogPanel();
 };
 
 } // namespace gui
