@@ -44,6 +44,7 @@ void MainWindow::initLogPanel()
     winLog->addToolBar(toolbLog);
 
     tblLog = new QTableView();
+    tblLog->setFrameStyle(QFrame::NoFrame);
     winLog->setCentralWidget(tblLog);
     winLog->setParent(dockLog);
     dockLog->setWidget(winLog);
