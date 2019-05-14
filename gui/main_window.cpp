@@ -1,3 +1,9 @@
+#include <QDockWidget>
+#include <QLabel>
+#include <QMainWindow>
+#include <QTableView>
+#include <QToolBar>
+
 #include "main_window.h"
 #include "ui_main_window.h"
 

@@ -1,10 +1,13 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#include <QDockWidget>
-#include <QLabel>
+class QDockWidget;
+class QLabel;
+class QTableView;
+class QToolBar;
+
 #include <QMainWindow>
-#include <QTableView>
+#include <QObject>
 
 namespace Ui {
 class MainWindow;
