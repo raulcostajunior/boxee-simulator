@@ -2,12 +2,15 @@
 #define BOXEE_H
 
 #include <cstdint>
+#include <QObject>
 #include <QString>
 
 namespace core {
 
-class Boxee
+class Boxee : public QObject
 {
+    Q_OBJECT
+
 public:
     static Boxee &instance();
 
@@ -49,9 +52,14 @@ public:
 
     void powerOff();
 
+signals:
+    void stateChanged(State newState);
+
+    void mediaTypeChanged(MediaType newMediaType);
+
 private:
     Boxee() = default;
-    ~Boxee() = default;
+    virtual ~Boxee() = default;
 
     Boxee(const Boxee &) = delete;
     Boxee &operator=(const Boxee &) = delete;
@@ -61,10 +69,10 @@ private:
     State _state = State::OFF;
     MediaType _mediaType = MediaType::NONE;
 
-    uint8_t _bootTimeSecs{3};
-    uint8_t _shutdownTimeSecs{2};
-    QString _password{""};
-    uint16_t _httpPort{8080};
+    uint8_t _bootTimeSecs = 3;
+    uint8_t _shutdownTimeSecs = 2;
+    QString _password; // QStrings are default initialized to the empty string.
+    uint16_t _httpPort = 8080;
 };
 
 } // namespace core
