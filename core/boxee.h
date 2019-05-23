@@ -5,6 +5,8 @@
 #include <QObject>
 #include <QString>
 
+#include "boxee_net_server.h"
+
 namespace core {
 
 class Boxee : public QObject
@@ -43,10 +45,8 @@ public:
     void setHttpPort(uint16_t);
 
     State state() const { return _state; }
-    void setState(State);
 
     MediaType mediaType() const { return _mediaType; }
-    void setMediaType(MediaType);
 
     void powerOn();
 
@@ -69,10 +69,20 @@ private:
     State _state = State::OFF;
     MediaType _mediaType = MediaType::NONE;
 
+    BoxeeNetServer _netServer;
+
     uint8_t _bootTimeSecs = 3;
     uint8_t _shutdownTimeSecs = 2;
     QString _password; // QStrings are default initialized to the empty string.
     uint16_t _httpPort = 8080;
+
+    // State changes should be called internally by higher level public methods like playVideo, promptForText, ... Those methods should be called primarly by screen controllers.
+    // The Boxee FSM should be kept internal to this class.
+    // IDEA: those public methods should be part of a base screen controller class which should be a friend of the Boxee class - this is coherent as the screen is part of the Boxee.
+    void setState(State);
+
+    // Media types changes are analogous to state changes and should be triggered by higher level public methods.
+    void setMediaType(MediaType);
 };
 
 } // namespace core

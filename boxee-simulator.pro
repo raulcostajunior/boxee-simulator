@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        core/boxee_net_server.cpp \
         main.cpp \
         gui/main_window.cpp \
         core/boxee.cpp

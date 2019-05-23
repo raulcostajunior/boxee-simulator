@@ -17,7 +17,11 @@ public:
 
     void stopRequestListener();
 
+    bool isListeningToRequests() const { return _requestListenerActive; }
+
 private:
+    bool _requestListenerActive = false;
+
     // TODO: add udp scan handler
 
     // TODO: add http request handler

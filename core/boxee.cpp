@@ -4,6 +4,8 @@
 
 using namespace core;
 
+// TODO: make class thread-safe.
+
 Boxee &Boxee::instance()
 {
     static Boxee m_instance;
@@ -12,32 +14,50 @@ Boxee &Boxee::instance()
 
 void Boxee::setBootTimeSecs(uint8_t bootTime)
 {
-    // TODO: write body
+    _bootTimeSecs = bootTime;
 }
 
 void Boxee::setShutdownTimeSecs(uint8_t shutdownTime)
 {
-    // TODO: write body
+    _shutdownTimeSecs = shutdownTime;
 }
 
 void Boxee::setPassword(const QString &password)
 {
-    // TODO: write body
+    if (password != _password) {
+        if (_netServer.isListeningToRequests()) {
+            _netServer.stopScanListener();
+            _password = password;
+            _netServer.startRequestListener(_httpPort, _password);
+        }
+    }
 }
 
 void Boxee::setHttpPort(uint16_t httpPort)
 {
-    // TODO: write body
+    if (httpPort != _httpPort) {
+        if (_netServer.isListeningToRequests()) {
+            _netServer.stopScanListener();
+            _httpPort = httpPort;
+            _netServer.startRequestListener(_httpPort, _password);
+        }
+    }
 }
 
 void Boxee::setState(State state)
 {
-    // TODO: write body
+    if (state != _state) {
+        _state = state;
+        emit(stateChanged(_state));
+    }
 }
 
 void Boxee::setMediaType(MediaType mediaType)
 {
-    // TODO: write body
+    if (mediaType != _mediaType) {
+        _mediaType = mediaType;
+        emit(mediaTypeChanged(_mediaType));
+    }
 }
 
 void Boxee::powerOn()
