@@ -2,6 +2,9 @@
 
 using namespace core;
 
+const uint16_t BoxeeNetServer::kBoxeeScanPort = 2562;
+const QString BoxeeNetServer::kBoxeeScanKey("b0xeeRem0tE!");
+
 void BoxeeNetServer::startScanListener()
 {
     // TODO: add method body

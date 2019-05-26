@@ -25,6 +25,9 @@ private:
     // TODO: add udp scan handler
 
     // TODO: add http request handler
+
+    static const uint16_t kBoxeeScanPort;
+    static const QString kBoxeeScanKey;
 };
 
 } // namespace core

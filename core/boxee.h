@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "boxee_net_server.h"
+#include "dto/net_message.h"
 
 namespace core {
 
@@ -32,6 +33,16 @@ public:
         IMAGE
     };
 
+    enum class RemoteKeyCode : uint16_t {
+        RIGHT = 273,
+        LEFT = 272,
+        UP = 270,
+        DOWN = 271,
+        OK = 256, // OK is the center button in the group of navegational
+        CANCEL = 257
+        // TODO: add the key codes for the keyboard
+    };
+
     uint8_t bootTimeSecs() const { return _bootTimeSecs; }
     void setBootTimeSecs(uint8_t);
 
@@ -56,6 +67,10 @@ signals:
     void stateChanged(State newState);
 
     void mediaTypeChanged(MediaType newMediaType);
+
+    void onRemoteKeyPress(uint16_t keyCode);
+
+    void onNetMessage(const dto::NetMessage &netMsg);
 
 private:
     Boxee() = default;
