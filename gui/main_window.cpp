@@ -4,6 +4,7 @@
 #include <QTableView>
 #include <QToolBar>
 
+#include "core/boxee.h"
 #include "main_window.h"
 #include "ui_main_window.h"
 
@@ -28,6 +29,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initActions()
 {
+    connect(ui->actionPower_On_Off, &QAction::triggered, this, &MainWindow::onPowerOnOff);
     connect(ui->actionQuit, &QAction::triggered, [this]() { this->close(); });
     connect(ui->actionAbout_Qt, &QAction::triggered, []() { qApp->aboutQt(); });
 }
@@ -61,4 +63,14 @@ void MainWindow::initStatusBar()
     lblBoxeeState = new QLabel("Shutting down");
     lblBoxeeState->setMinimumSize(lblBoxeeState->sizeHint());
     ui->statusBar->addPermanentWidget(lblBoxeeState);
+}
+
+void MainWindow::onPowerOnOff()
+{
+    if (core::Boxee::instance().state() == core::Boxee::State::OFF) {
+        // Boxee will be turned on
+        core::Boxee::instance().powerOn();
+    } else {
+        core::Boxee::instance().powerOff();
+    }
 }

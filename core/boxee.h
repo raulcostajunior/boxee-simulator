@@ -49,10 +49,10 @@ public:
     uint8_t shutdownTimeSecs() const { return _shutdownTimeSecs; }
     void setShutdownTimeSecs(uint8_t);
 
-    const QString &password() const { return _password; }
+    const QString &password() const { return _netServer.password(); }
     void setPassword(const QString &);
 
-    uint16_t httpPort() const { return _httpPort; }
+    uint16_t httpPort() const { return _netServer.httpPort(); }
     void setHttpPort(uint16_t);
 
     State state() const { return _state; }
@@ -88,8 +88,6 @@ private:
 
     uint8_t _bootTimeSecs = 3;
     uint8_t _shutdownTimeSecs = 2;
-    QString _password; // QStrings are default initialized to the empty string.
-    uint16_t _httpPort = 8080;
 
     // State changes should be called internally by higher level public methods like playVideo, promptForText, ... Those methods should be called primarly by screen controllers.
     // The Boxee FSM should be kept internal to this class.

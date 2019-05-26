@@ -5,7 +5,8 @@
 
 using namespace core;
 
-// TODO: make class thread-safe.
+// TODO: evaluate if class must be thread-safe - as it currently uses the MainThread event loop for QTimer single shots,
+//       it is not the case.
 
 Boxee &Boxee::instance()
 {
@@ -25,24 +26,12 @@ void Boxee::setShutdownTimeSecs(uint8_t shutdownTime)
 
 void Boxee::setPassword(const QString &password)
 {
-    if (password != _password) {
-        if (_netServer.isListeningToRequests()) {
-            _netServer.stopScanListener();
-            _password = password;
-            _netServer.startRequestListener(_httpPort, _password);
-        }
-    }
+    _netServer.setPassword(password);
 }
 
 void Boxee::setHttpPort(uint16_t httpPort)
 {
-    if (httpPort != _httpPort) {
-        if (_netServer.isListeningToRequests()) {
-            _netServer.stopScanListener();
-            _httpPort = httpPort;
-            _netServer.startRequestListener(_httpPort, _password);
-        }
-    }
+    _netServer.setHttpPort(httpPort);
 }
 
 void Boxee::setState(State state)
@@ -73,7 +62,7 @@ void Boxee::powerOn()
     QTimer::singleShot(_bootTimeSecs * 1000, [this] {
         setState(State::ON_STANDARD);
         _netServer.startScanListener();
-        _netServer.startRequestListener(_httpPort, _password);
+        _netServer.startRequestListener();
     });
 }
 

@@ -2,27 +2,46 @@
 #define BOXEE_NET_SERVER_H
 
 #include <cstdint>
+#include <mutex>
+#include <QObject>
 #include <QString>
+
+class QUdpSocket;
 
 namespace core {
 
-class BoxeeNetServer
+class BoxeeNetServer : public QObject
 {
+    Q_OBJECT
+
 public:
+    BoxeeNetServer();
+
     void startScanListener();
 
     void stopScanListener();
 
-    void startRequestListener(uint16_t port, const QString &password);
+    void startRequestListener();
 
     void stopRequestListener();
 
-    bool isListeningToRequests() const { return _requestListenerActive; }
+    const QString &password() const;
+    void setPassword(const QString &pwd);
+
+    uint16_t httpPort() const;
+    void setHttpPort(uint16_t port);
 
 private:
-    bool _requestListenerActive = false;
+    mutable std::mutex _listenParamMutex;
+    QString _password; // QStrings are default initialized to the empty string.
+    uint16_t _httpPort{8080};
 
-    // TODO: add udp scan handler
+    bool _scanListening = false;
+    bool _requestListening = false;
+
+    QUdpSocket *_scanSocket;
+
+    void processScanDatagrams();
 
     // TODO: add http request handler
 

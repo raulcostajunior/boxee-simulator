@@ -23,6 +23,10 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+
+    void onPowerOnOff();
+
 private:
     Ui::MainWindow *ui;
 
