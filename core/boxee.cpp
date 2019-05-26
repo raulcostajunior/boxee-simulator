@@ -70,7 +70,11 @@ void Boxee::powerOn()
 
     setState(State::BOOTING);
 
-    QTimer::singleShot(_bootTimeSecs * 1000, [this] { setState(State::ON_STANDARD); });
+    QTimer::singleShot(_bootTimeSecs * 1000, [this] {
+        setState(State::ON_STANDARD);
+        _netServer.startScanListener();
+        _netServer.startRequestListener(_httpPort, _password);
+    });
 }
 
 void Boxee::powerOff()
@@ -81,5 +85,9 @@ void Boxee::powerOff()
 
     setState(State::SHUTTING_DOWN);
 
-    QTimer::singleShot(_shutdownTimeSecs * 1000, [this] { setState(State::OFF); });
+    QTimer::singleShot(_shutdownTimeSecs * 1000, [this] {
+        setState(State::OFF);
+        _netServer.stopScanListener();
+        _netServer.stopRequestListener();
+    });
 }
