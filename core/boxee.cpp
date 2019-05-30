@@ -73,6 +73,11 @@ QString Boxee::stateAsString() const
     return stateStr;
 }
 
+QString Boxee::boxeeAddress() const
+{
+    return _netServer.localActiveAddress().toString();
+}
+
 void Boxee::setMediaType(MediaType mediaType)
 {
     if (mediaType != _mediaType) {

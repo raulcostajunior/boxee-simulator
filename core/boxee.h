@@ -66,6 +66,8 @@ public:
 
     void powerOff();
 
+    QString boxeeAddress() const;
+
 signals:
     void stateChanged(State newState);
 

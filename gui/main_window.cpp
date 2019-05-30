@@ -11,6 +11,7 @@
 #include "dto/net_message.h"
 
 using namespace gui;
+using namespace core;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -25,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     updateStatusBar();
 
     connectBoxeeSignals();
+
+    this->setWindowTitle(tr("Boxee Simulator (%1)").arg(Boxee::instance().boxeeAddress()));
 }
 
 MainWindow::~MainWindow()
@@ -34,7 +37,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectBoxeeSignals()
 {
-    connect(&core::Boxee::instance(), &core::Boxee::stateChanged, [this](core::Boxee::State) {
+    connect(&Boxee::instance(), &Boxee::stateChanged, [this](Boxee::State) {
         this->updateActions();
         this->updateStatusBar();
     });
@@ -49,20 +52,35 @@ void MainWindow::initActions()
 
 void MainWindow::updateActions()
 {
-    core::Boxee::State currState = core::Boxee::instance().state();
-    ui->actionPower_On_Off->setEnabled(currState != core::Boxee::State::BOOTING
-                                       && currState != core::Boxee::State::SHUTTING_DOWN);
-    ui->actionInput_Text->setEnabled(currState == core::Boxee::State::ON_TEXT_ENTRY);
-    bool frontFaceBtnsEnabled = (currState != core::Boxee::State::OFF
-                                 && currState != core::Boxee::State::BOOTING
-                                 && currState != core::Boxee::State::SHUTTING_DOWN);
+    const Boxee::State currState = Boxee::instance().state();
+    const Boxee::MediaType currMedia = Boxee::instance().mediaType();
+
+    ui->actionPower_On_Off->setEnabled(currState != Boxee::State::BOOTING
+                                       && currState != Boxee::State::SHUTTING_DOWN);
+    if (currState != Boxee::State::OFF && currState != Boxee::State::BOOTING) {
+        ui->actionPower_On_Off->setIcon(QIcon(":/images/power-off.png"));
+    } else {
+        ui->actionPower_On_Off->setIcon(QIcon(":/images/power-on.png"));
+    }
+
+    ui->actionInput_Text->setEnabled(currState == Boxee::State::ON_TEXT_ENTRY);
+
+    bool frontFaceBtnsEnabled = (currState != Boxee::State::OFF
+                                 && currState != Boxee::State::BOOTING
+                                 && currState != Boxee::State::SHUTTING_DOWN);
     ui->actionUp->setEnabled(frontFaceBtnsEnabled);
     ui->actionDown->setEnabled(frontFaceBtnsEnabled);
     ui->actionLeft->setEnabled(frontFaceBtnsEnabled);
     ui->actionRight->setEnabled(frontFaceBtnsEnabled);
     ui->actionMenu->setEnabled(frontFaceBtnsEnabled);
     ui->actionEnter->setEnabled(frontFaceBtnsEnabled);
-    ui->actionPlay_Pause->setEnabled(frontFaceBtnsEnabled);
+
+    ui->actionPlay_Pause->setEnabled(frontFaceBtnsEnabled && currMedia != Boxee::MediaType::NONE);
+    if (currState == Boxee::State::ON_MEDIA_PLAYING) {
+        ui->actionPlay_Pause->setIcon(QIcon(":/images/pause.png"));
+    } else {
+        ui->actionPlay_Pause->setIcon(QIcon(":/images/play.png"));
+    }
 }
 
 void MainWindow::initLogPanel()

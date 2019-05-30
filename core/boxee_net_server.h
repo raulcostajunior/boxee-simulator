@@ -32,6 +32,8 @@ public:
     uint16_t httpPort() const;
     void setHttpPort(uint16_t port);
 
+    QHostAddress localActiveAddress() const;
+
 private:
     mutable std::mutex _listenParamMutex;
     QString _password; // QStrings are default initialized to the empty string.
@@ -52,8 +54,6 @@ private:
     void processScanDatagrams() const;
 
     bool isScanDatagramValid(const QString &payload) const;
-
-    QHostAddress localActiveAddress() const;
 
     // TODO: add http request handler
 
