@@ -42,6 +42,37 @@ void Boxee::setState(State state)
     }
 }
 
+QString Boxee::stateAsString() const
+{
+    QString stateStr;
+
+    switch (_state) {
+    case State::OFF:
+        stateStr = tr("Off");
+        break;
+    case State::BOOTING:
+        stateStr = tr("Booting...");
+        break;
+    case State::SHUTTING_DOWN:
+        stateStr = tr("Shutting down...");
+        break;
+    case State::ON_STANDARD:
+        stateStr = tr("Active");
+        break;
+    case State::ON_TEXT_ENTRY:
+        stateStr = tr("Active (text input)");
+        break;
+    case State::ON_MEDIA_PLAYING:
+        stateStr = tr("Active (playing media)");
+        break;
+    case State::ON_MEDIA_NOT_PLAYING:
+        stateStr = tr("Active (media not playing)");
+        break;
+    }
+
+    return stateStr;
+}
+
 void Boxee::setMediaType(MediaType mediaType)
 {
     if (mediaType != _mediaType) {

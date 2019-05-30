@@ -41,6 +41,11 @@ private:
     void initActions();
     void initStatusBar();
     void initLogPanel();
+
+    void connectBoxeeSignals();
+
+    void updateActions();
+    void updateStatusBar();
 };
 
 } // namespace gui

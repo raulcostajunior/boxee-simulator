@@ -20,9 +20,10 @@ public:
     enum class State : uint8_t {
         OFF, // Powered off.
         BOOTING,
-        ON_STANDARD,   // On and in standard mode (neither playing media nor handling text input).
-        ON_PLAYING,    // On and playing some kind of media.
-        ON_TEXT_ENTRY, // On and handling text input.
+        ON_STANDARD, // On and in standard mode (neither playing media nor handling text input).
+        ON_MEDIA_PLAYING,     // On and playing some kind of media.
+        ON_MEDIA_NOT_PLAYING, // On and waiting to play some kind of media.
+        ON_TEXT_ENTRY,        // On and handling text input.
         SHUTTING_DOWN
     };
 
@@ -56,6 +57,8 @@ public:
     void setHttpPort(uint16_t);
 
     State state() const { return _state; }
+
+    QString stateAsString() const;
 
     MediaType mediaType() const { return _mediaType; }
 

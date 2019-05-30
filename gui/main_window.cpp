@@ -20,6 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
     initActions();
     initLogPanel();
     initStatusBar();
+
+    updateActions();
+    updateStatusBar();
+
+    connectBoxeeSignals();
 }
 
 MainWindow::~MainWindow()
@@ -27,11 +32,37 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::connectBoxeeSignals()
+{
+    connect(&core::Boxee::instance(), &core::Boxee::stateChanged, [this](core::Boxee::State) {
+        this->updateActions();
+        this->updateStatusBar();
+    });
+}
+
 void MainWindow::initActions()
 {
     connect(ui->actionPower_On_Off, &QAction::triggered, this, &MainWindow::onPowerOnOff);
     connect(ui->actionQuit, &QAction::triggered, [this]() { this->close(); });
     connect(ui->actionAbout_Qt, &QAction::triggered, []() { qApp->aboutQt(); });
+}
+
+void MainWindow::updateActions()
+{
+    core::Boxee::State currState = core::Boxee::instance().state();
+    ui->actionPower_On_Off->setEnabled(currState != core::Boxee::State::BOOTING
+                                       && currState != core::Boxee::State::SHUTTING_DOWN);
+    ui->actionInput_Text->setEnabled(currState == core::Boxee::State::ON_TEXT_ENTRY);
+    bool frontFaceBtnsEnabled = (currState != core::Boxee::State::OFF
+                                 && currState != core::Boxee::State::BOOTING
+                                 && currState != core::Boxee::State::SHUTTING_DOWN);
+    ui->actionUp->setEnabled(frontFaceBtnsEnabled);
+    ui->actionDown->setEnabled(frontFaceBtnsEnabled);
+    ui->actionLeft->setEnabled(frontFaceBtnsEnabled);
+    ui->actionRight->setEnabled(frontFaceBtnsEnabled);
+    ui->actionMenu->setEnabled(frontFaceBtnsEnabled);
+    ui->actionEnter->setEnabled(frontFaceBtnsEnabled);
+    ui->actionPlay_Pause->setEnabled(frontFaceBtnsEnabled);
 }
 
 void MainWindow::initLogPanel()
@@ -60,9 +91,15 @@ void MainWindow::initLogPanel()
 
 void MainWindow::initStatusBar()
 {
-    lblBoxeeState = new QLabel("Shutting down");
+    lblBoxeeState = new QLabel("                       ");
     lblBoxeeState->setMinimumSize(lblBoxeeState->sizeHint());
+    lblBoxeeState->setAlignment(Qt::AlignCenter);
     ui->statusBar->addPermanentWidget(lblBoxeeState);
+}
+
+void MainWindow::updateStatusBar()
+{
+    lblBoxeeState->setText(core::Boxee::instance().stateAsString());
 }
 
 void MainWindow::onPowerOnOff()
