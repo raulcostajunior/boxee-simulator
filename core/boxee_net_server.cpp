@@ -5,6 +5,8 @@
 #include <QByteArray>
 #include <QCryptographicHash>
 #include <QDebug>
+#include <QNetworkDatagram>
+#include <QNetworkInterface>
 #include <QString>
 #include <QUdpSocket>
 #include <QXmlStreamReader>
@@ -13,6 +15,7 @@ using namespace core;
 
 const uint16_t BoxeeNetServer::kBoxeeScanPort = 2562;
 const QString BoxeeNetServer::kBoxeeSharedKey("b0xeeRem0tE!");
+const QString BoxeeNetServer::kBoxeeResponseChallenge("b0xeeResp0nsE");
 
 BoxeeNetServer::BoxeeNetServer()
     : _scanSocket(new QUdpSocket(this))
@@ -106,26 +109,32 @@ void BoxeeNetServer::stopRequestListener()
 
 void BoxeeNetServer::processScanDatagrams() const
 {
-    QByteArray scanDatagram;
     while (_scanSocket->hasPendingDatagrams()) {
-        QHostAddress senderAddr;
-        quint16 senderPort;
-        scanDatagram.resize(static_cast<int>(_scanSocket->pendingDatagramSize()));
-        _scanSocket->readDatagram(scanDatagram.data(),
-                                  scanDatagram.size(),
-                                  &senderAddr,
-                                  &senderPort);
-        const QString payload = QString(scanDatagram.constData());
-
-        qDebug() << "Payload received through UDP:\n" << payload << "\n";
+        QNetworkDatagram datagram = _scanSocket->receiveDatagram();
+        QHostAddress senderAddr = datagram.senderAddress();
+        quint16 senderPort = static_cast<quint16>(datagram.senderPort());
+        const QString payload = QString(datagram.data().constData());
 
         if (isScanDatagramValid(payload)) {
-            qDebug() << "Scan datagram valid - will send the response..."
-                     << "\n";
             // Builds and sends the response.
+            QCryptographicHash md5Hash(QCryptographicHash::Algorithm::Md5);
+            md5Hash.addData(BoxeeNetServer::kBoxeeResponseChallenge.toUtf8());
+            md5Hash.addData(BoxeeNetServer::kBoxeeSharedKey.toUtf8());
+            QString generatedSignature(md5Hash.result().toHex().constData());
+
+            QString respPayload = QString(
+                                      "<?xml version=\"1.0\"?>"
+                                      "<BDP1 cmd=\"found\" application=\"boxee\" version=\"1.0\" "
+                                      "name=\"%1\" response=\"%2\" "
+                                      "httpPort=\"%3\" httpAuthRequired=\"%4\" "
+                                      "signature=\"%5\"/>")
+                                      .arg(localActiveAddress().toString())
+                                      .arg(BoxeeNetServer::kBoxeeResponseChallenge)
+                                      .arg(_httpPort)
+                                      .arg(_password.isEmpty() ? "false" : "true")
+                                      .arg(generatedSignature.toUpper());
             QByteArray respDatagram;
-            // TODO: generate real response payload.
-            respDatagram.append(QByteArray("TODO:// add real payload"));
+            respDatagram.append(QByteArray(respPayload.toUtf8()));
             _scanSocket->writeDatagram(respDatagram, senderAddr, senderPort);
         }
     }
@@ -137,8 +146,9 @@ bool BoxeeNetServer::isScanDatagramValid(const QString &payload) const
     QByteArray signature;
     QByteArray challenge;
     QXmlStreamReader reader(payload);
-    // Parses the xml looking for the "signature" attribute in the "BDP1" element.
-    // If the attribute cannot be found, the payload is considered invalid.
+    // Parses the xml looking for the "signature" and "challenge" attributes in the "BDP1" element.
+    // Validates other attributes on its way. If any attribute can't be found with the expected
+    // values, the payload is considered invalid.
     while (!reader.atEnd() && validPayload) {
         if (reader.hasError())
             validPayload = false;
@@ -172,4 +182,28 @@ bool BoxeeNetServer::isScanDatagramValid(const QString &payload) const
         validPayload = (generatedSignature.toUpper() == signature.toUpper());
     }
     return validPayload;
+}
+
+QHostAddress BoxeeNetServer::localActiveAddress() const
+{
+    QHostAddress localAddr(QHostAddress::LocalHost);
+    QNetworkInterface activeInterface;
+    bool interfaceFound = false;
+    for (QNetworkInterface interface : QNetworkInterface::allInterfaces()) {
+        if (interface.flags().testFlag(QNetworkInterface::IsUp)
+            && (!interface.flags().testFlag(QNetworkInterface::IsLoopBack))) {
+            activeInterface = interface;
+            interfaceFound = true;
+            break;
+        }
+    }
+    if (interfaceFound) {
+        for (auto &addr : activeInterface.allAddresses()) {
+            if (addr.protocol() == QAbstractSocket::IPv4Protocol && !addr.isLoopback()) {
+                localAddr = addr;
+                break;
+            }
+        }
+    }
+    return localAddr;
 }

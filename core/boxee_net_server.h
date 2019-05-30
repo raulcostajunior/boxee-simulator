@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <mutex>
+#include <QHostAddress>
 #include <QObject>
 #include <QString>
 
@@ -52,10 +53,13 @@ private:
 
     bool isScanDatagramValid(const QString &payload) const;
 
+    QHostAddress localActiveAddress() const;
+
     // TODO: add http request handler
 
     static const uint16_t kBoxeeScanPort;
     static const QString kBoxeeSharedKey;
+    static const QString kBoxeeResponseChallenge;
 };
 
 } // namespace core
