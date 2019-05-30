@@ -41,12 +41,21 @@ private:
 
     QUdpSocket *_scanSocket;
 
-    void processScanDatagrams();
+    /**
+     * @brief Processes a datagram that is supposedly a scan request sent by an instance of a Boxee Remote
+     * application. If the request is successfully validated, sends the response back to the requester.
+     * 
+     * @note The "protocol" specification for discovery of Boxee units by a remote party can be found at
+     * https://web.archive.org/web/20130603035923/http://developer.boxee.tv/Remote_Control_Interface.
+     */
+    void processScanDatagrams() const;
+
+    bool isScanDatagramValid(const QString &payload) const;
 
     // TODO: add http request handler
 
     static const uint16_t kBoxeeScanPort;
-    static const QString kBoxeeScanKey;
+    static const QString kBoxeeSharedKey;
 };
 
 } // namespace core

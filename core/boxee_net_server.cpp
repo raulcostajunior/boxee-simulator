@@ -3,14 +3,16 @@
 #include <cstdint>
 #include <mutex>
 #include <QByteArray>
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QString>
 #include <QUdpSocket>
+#include <QXmlStreamReader>
 
 using namespace core;
 
 const uint16_t BoxeeNetServer::kBoxeeScanPort = 2562;
-const QString BoxeeNetServer::kBoxeeScanKey("b0xeeRem0tE!");
+const QString BoxeeNetServer::kBoxeeSharedKey("b0xeeRem0tE!");
 
 BoxeeNetServer::BoxeeNetServer()
     : _scanSocket(new QUdpSocket(this))
@@ -102,7 +104,7 @@ void BoxeeNetServer::stopRequestListener()
     _requestListening = false;
 }
 
-void BoxeeNetServer::processScanDatagrams()
+void BoxeeNetServer::processScanDatagrams() const
 {
     QByteArray scanDatagram;
     while (_scanSocket->hasPendingDatagrams()) {
@@ -113,12 +115,61 @@ void BoxeeNetServer::processScanDatagrams()
                                   scanDatagram.size(),
                                   &senderAddr,
                                   &senderPort);
-        const char *pPayload = scanDatagram.constData();
-        // TODO: add payload validation before sending out response.
-        qDebug() << "Payload received through UDP:\n" << pPayload << "\n";
-        QByteArray respDatagram;
-        // TODO: generate real response payload.
-        respDatagram.append(QByteArray("TODO:// add real payload"));
-        _scanSocket->writeDatagram(respDatagram, senderAddr, senderPort);
+        const QString payload = QString(scanDatagram.constData());
+
+        qDebug() << "Payload received through UDP:\n" << payload << "\n";
+
+        if (isScanDatagramValid(payload)) {
+            qDebug() << "Scan datagram valid - will send the response..."
+                     << "\n";
+            // Builds and sends the response.
+            QByteArray respDatagram;
+            // TODO: generate real response payload.
+            respDatagram.append(QByteArray("TODO:// add real payload"));
+            _scanSocket->writeDatagram(respDatagram, senderAddr, senderPort);
+        }
     }
+}
+
+bool BoxeeNetServer::isScanDatagramValid(const QString &payload) const
+{
+    bool validPayload = true;
+    QByteArray signature;
+    QByteArray challenge;
+    QXmlStreamReader reader(payload);
+    // Parses the xml looking for the "signature" attribute in the "BDP1" element.
+    // If the attribute cannot be found, the payload is considered invalid.
+    while (!reader.atEnd() && validPayload) {
+        if (reader.hasError())
+            validPayload = false;
+        else if (reader.readNext() == QXmlStreamReader::StartElement) {
+            if (reader.name() == "BDP1") {
+                validPayload = (reader.attributes().hasAttribute("cmd")
+                                && reader.attributes().value("cmd") == "discover");
+                if (!validPayload)
+                    continue;
+                validPayload = (reader.attributes().hasAttribute("application")
+                                && reader.attributes().value("application") == "iphone_remote");
+                if (!validPayload)
+                    continue;
+                validPayload = reader.attributes().hasAttribute("challenge");
+                if (!validPayload)
+                    continue;
+                challenge = reader.attributes().value("challenge").toUtf8();
+                validPayload = reader.attributes().hasAttribute("signature");
+                if (!validPayload)
+                    continue;
+                signature = reader.attributes().value("signature").toUtf8();
+            }
+        }
+    }
+    if (validPayload) {
+        // Checks the signature against the challenge.
+        QCryptographicHash md5Hash(QCryptographicHash::Algorithm::Md5);
+        md5Hash.addData(challenge);
+        md5Hash.addData(BoxeeNetServer::kBoxeeSharedKey.toUtf8());
+        QString generatedSignature(md5Hash.result().toHex().constData());
+        validPayload = (generatedSignature.toUpper() == signature.toUpper());
+    }
+    return validPayload;
 }
