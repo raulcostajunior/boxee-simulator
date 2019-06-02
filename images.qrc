@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/power-off.png</file>
         <file>images/clear-log.png</file>
         <file>images/down.png</file>
         <file>images/enter.png</file>
@@ -13,5 +12,6 @@
         <file>images/right.png</file>
         <file>images/save-as.png</file>
         <file>images/up.png</file>
+        <file>images/power-off.png</file>
     </qresource>
 </RCC>

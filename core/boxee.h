@@ -45,10 +45,8 @@ public:
     };
 
     uint8_t bootTimeSecs() const { return _bootTimeSecs; }
-    void setBootTimeSecs(uint8_t);
 
     uint8_t shutdownTimeSecs() const { return _shutdownTimeSecs; }
-    void setShutdownTimeSecs(uint8_t);
 
     const QString &password() const { return _netServer.password(); }
     void setPassword(const QString &);

@@ -14,16 +14,6 @@ Boxee &Boxee::instance()
     return m_instance;
 }
 
-void Boxee::setBootTimeSecs(uint8_t bootTime)
-{
-    _bootTimeSecs = bootTime;
-}
-
-void Boxee::setShutdownTimeSecs(uint8_t shutdownTime)
-{
-    _shutdownTimeSecs = shutdownTime;
-}
-
 void Boxee::setPassword(const QString &password)
 {
     _netServer.setPassword(password);

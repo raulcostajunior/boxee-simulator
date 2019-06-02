@@ -1,6 +1,7 @@
 #include <QDockWidget>
 #include <QLabel>
 #include <QMainWindow>
+#include <QSettings>
 #include <QTableView>
 #include <QToolBar>
 
@@ -27,7 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connectBoxeeSignals();
 
-    this->setWindowTitle(tr("Boxee Simulator (%1)").arg(Boxee::instance().boxeeAddress()));
+    setWindowTitle(tr("Boxee Simulator (%1)").arg(Boxee::instance().boxeeAddress()));
+
+    loadSettings();
 }
 
 MainWindow::~MainWindow()
@@ -116,16 +119,39 @@ void MainWindow::initStatusBar()
 }
 
 void MainWindow::updateStatusBar()
-{
+{   
     lblBoxeeState->setText(core::Boxee::instance().stateAsString());
+}
+
+void MainWindow::closeEvent(QCloseEvent *)
+{
+    saveSettings();
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings settings("cyncrun", "BoxeeSimulator");
+
+    Boxee::instance().setHttpPort(static_cast<uint16_t>(settings.value("httpPort", 8080).toInt()));
+    Boxee::instance().setPassword(settings.value("password", "").toString());
+    restoreGeometry(settings.value("mainWinGeometry").toByteArray());
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings("cyncrun", "BoxeeSimulator");
+
+    settings.setValue("httpPort", Boxee::instance().httpPort());
+    settings.setValue("password", Boxee::instance().password());
+    settings.setValue("mainWinGeometry", saveGeometry());
 }
 
 void MainWindow::onPowerOnOff()
 {
-    if (core::Boxee::instance().state() == core::Boxee::State::OFF) {
+    if (Boxee::instance().state() == Boxee::State::OFF) {
         // Boxee will be turned on
-        core::Boxee::instance().powerOn();
+        Boxee::instance().powerOn();
     } else {
-        core::Boxee::instance().powerOff();
+        Boxee::instance().powerOff();
     }
 }

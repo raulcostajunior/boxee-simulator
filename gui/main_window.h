@@ -1,6 +1,7 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+class QCloseEvent;
 class QDockWidget;
 class QLabel;
 class QTableView;
@@ -22,6 +23,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+protected:
+    void closeEvent(QCloseEvent *);
 
 private slots:
 
@@ -46,6 +50,9 @@ private:
 
     void updateActions();
     void updateStatusBar();
+
+    void loadSettings();
+    void saveSettings();
 };
 
 } // namespace gui
