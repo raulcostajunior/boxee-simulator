@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include <QString>
 
-namespace dto {
+namespace model {
 
 enum class NetMessageType : uint8_t {
     SCN, // Scan network for Boxees.
@@ -26,10 +26,9 @@ struct NetMessage
     NetMessageType type;
     NetMessageDirection direction;
     QString boxeeRemoteName;
-    QString boxeeRemoteAddr;
     QString payload;
 };
 
-} // namespace dto
+} // namespace model
 
 #endif // NET_MESSAGE_H

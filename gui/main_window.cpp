@@ -2,14 +2,14 @@
 #include <QLabel>
 #include <QMainWindow>
 #include <QSettings>
-#include <QTableView>
 #include <QToolBar>
 
 #include "core/boxee.h"
+#include "log_view.h"
 #include "main_window.h"
 #include "ui_main_window.h"
 
-#include "dto/net_message.h"
+#include "model/net_message.h"
 
 using namespace gui;
 using namespace core;
@@ -103,7 +103,7 @@ void MainWindow::initLogPanel()
     toolbLog->addAction(ui->actionClear);
     winLog->addToolBar(toolbLog);
 
-    tblLog = new QTableView();
+    tblLog = new LogView(nullptr);
     tblLog->setFrameStyle(QFrame::NoFrame);
     winLog->setCentralWidget(tblLog);
     winLog->setParent(dockLog);
@@ -131,6 +131,7 @@ void MainWindow::closeEvent(QCloseEvent *)
 void MainWindow::loadSettings()
 {
     QSettings settings("cyncrun", "BoxeeSimulator");
+    qDebug() << settings.fileName();
 
     Boxee::instance().setHttpPort(static_cast<uint16_t>(settings.value("httpPort", 8080).toInt()));
     Boxee::instance().setPassword(settings.value("password", "").toString());
@@ -149,7 +150,6 @@ void MainWindow::saveSettings()
 void MainWindow::onPowerOnOff()
 {
     if (Boxee::instance().state() == Boxee::State::OFF) {
-        // Boxee will be turned on
         Boxee::instance().powerOn();
     } else {
         Boxee::instance().powerOff();

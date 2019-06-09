@@ -6,7 +6,7 @@
 #include <QString>
 
 #include "boxee_net_server.h"
-#include "dto/net_message.h"
+#include "model/net_message.h"
 
 namespace core {
 
@@ -73,7 +73,7 @@ signals:
 
     void onRemoteKeyPress(uint16_t keyCode);
 
-    void onNetMessage(const dto::NetMessage &netMsg);
+    void onNetMessage(const model::NetMessage &netMsg);
 
 private:
     Boxee() = default;

@@ -26,15 +26,17 @@ CONFIG += c++11
 
 SOURCES += \
         core/boxee_net_server.cpp \
+        gui/log_view.cpp \
         main.cpp \
         gui/main_window.cpp \
         core/boxee.cpp
 
 HEADERS += \
-        dto/net_message.h \
+        gui/log_view.h \
         gui/main_window.h \
         core/boxee.h \
-        core/boxee_net_server.h
+        core/boxee_net_server.h \
+        model/net_message.h
 
 FORMS += \
     gui/main_window.ui
