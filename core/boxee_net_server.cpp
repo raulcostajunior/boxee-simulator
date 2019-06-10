@@ -1,5 +1,7 @@
 #include "boxee_net_server.h"
 
+#include "model/net_message.h"
+
 #include <cstdint>
 #include <mutex>
 #include <QByteArray>
@@ -12,6 +14,7 @@
 #include <QXmlStreamReader>
 
 using namespace core;
+using namespace model;
 
 const uint16_t BoxeeNetServer::kBoxeeScanPort = 2562;
 const QString BoxeeNetServer::kBoxeeSharedKey("b0xeeRem0tE!");
@@ -107,15 +110,25 @@ void BoxeeNetServer::stopRequestListener()
     _requestListening = false;
 }
 
-void BoxeeNetServer::processScanDatagrams() const
+void BoxeeNetServer::processScanDatagrams()
 {
     while (_scanSocket->hasPendingDatagrams()) {
         QNetworkDatagram datagram = _scanSocket->receiveDatagram();
         QHostAddress senderAddr = datagram.senderAddress();
+        quint32 senderAddrV4 = senderAddr.toIPv4Address();
         quint16 senderPort = static_cast<quint16>(datagram.senderPort());
         const QString payload = QString(datagram.data().constData());
 
         if (isScanDatagramValid(payload)) {
+            // Emits signal for valid scan request received.
+            NetMessage scanRequest;
+            scanRequest.dateTime = QDateTime::currentDateTime();
+            scanRequest.type = NetMessageType::SCN;
+            scanRequest.direction = NetMessageDirection::FROM_REMOTE;
+            scanRequest.boxeeRemoteName = QHostAddress(senderAddrV4).toString();
+            scanRequest.payload = payload;
+            emit(onNetMessage(scanRequest));
+
             // Builds and sends the response.
             QCryptographicHash md5Hash(QCryptographicHash::Algorithm::Md5);
             md5Hash.addData(BoxeeNetServer::kBoxeeResponseChallenge.toUtf8());
@@ -136,6 +149,28 @@ void BoxeeNetServer::processScanDatagrams() const
             QByteArray respDatagram;
             respDatagram.append(QByteArray(respPayload.toUtf8()));
             _scanSocket->writeDatagram(respDatagram, senderAddr, senderPort);
+
+            // Emits signal for scan reply sent.
+            NetMessage scanReply;
+            scanReply.dateTime = QDateTime::currentDateTime();
+            scanReply.type = NetMessageType::SCN;
+            scanReply.direction = NetMessageDirection::TO_REMOTE;
+            // Need to rebuild IP from quint32 for the host address to be an IPv4 address; otherwise,
+            // since Qt5 it will be an IPv6 address with the string prefix "::ffff:".
+            scanReply.boxeeRemoteName
+                = QString("%1:%2").arg(QHostAddress(senderAddrV4).toString()).arg(senderPort);
+            scanReply.payload = payload;
+            emit(onNetMessage(scanReply));
+
+        } else {
+            // Emits signal for invalid scan request received.
+            NetMessage invalidScanRequest;
+            invalidScanRequest.dateTime = QDateTime::currentDateTime();
+            invalidScanRequest.type = NetMessageType::ERR_SCN;
+            invalidScanRequest.direction = NetMessageDirection::FROM_REMOTE;
+            invalidScanRequest.boxeeRemoteName = QHostAddress(senderAddrV4).toString();
+            invalidScanRequest.payload = payload;
+            emit(onNetMessage(invalidScanRequest));
         }
     }
 }

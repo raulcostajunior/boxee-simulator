@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QString>
 
+#include "model/net_message.h"
+
 class QUdpSocket;
 
 namespace core {
@@ -34,6 +36,9 @@ public:
 
     QHostAddress localActiveAddress() const;
 
+signals:
+    void onNetMessage(const model::NetMessage &);
+
 private:
     mutable std::mutex _listenParamMutex;
     QString _password; // QStrings are default initialized to the empty string.
@@ -51,7 +56,7 @@ private:
      * @note The "protocol" specification for discovery of Boxee units by a remote party can be found at
      * https://web.archive.org/web/20130603035923/http://developer.boxee.tv/Remote_Control_Interface.
      */
-    void processScanDatagrams() const;
+    void processScanDatagrams();
 
     bool isScanDatagramValid(const QString &payload) const;
 

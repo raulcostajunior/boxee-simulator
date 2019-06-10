@@ -76,7 +76,7 @@ signals:
     void onNetMessage(const model::NetMessage &netMsg);
 
 private:
-    Boxee() = default;
+    Boxee();
     virtual ~Boxee() = default;
 
     Boxee(const Boxee &) = delete;

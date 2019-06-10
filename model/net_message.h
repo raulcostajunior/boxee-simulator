@@ -8,8 +8,10 @@
 namespace model {
 
 enum class NetMessageType : uint8_t {
-    SCN, // Scan network for Boxees.
-    CMD  // Command sent from a remote to a Boxee.
+    SCN,     // Scan network for Boxees.
+    CMD,     // Command sent from a remote to a Boxee.
+    ERR_SCN, // Invalid scan request from a remote.
+    ERR_CMD  // Invalund command sent from a remote.
 };
 
 enum class NetMessageDirection : uint8_t {
@@ -27,6 +29,8 @@ struct NetMessage
     NetMessageDirection direction;
     QString boxeeRemoteName;
     QString payload;
+
+    QString messageDescription() const;
 };
 
 } // namespace model

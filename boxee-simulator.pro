@@ -29,7 +29,8 @@ SOURCES += \
         gui/log_view.cpp \
         main.cpp \
         gui/main_window.cpp \
-        core/boxee.cpp
+        core/boxee.cpp \
+        model/net_message.cpp
 
 HEADERS += \
         gui/log_view.h \

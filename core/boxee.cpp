@@ -3,15 +3,28 @@
 #include <QString>
 #include <QTimer>
 
+#include "boxee_net_server.h"
+#include "model/net_message.h"
+
 using namespace core;
+using namespace model;
 
 // TODO: evaluate if class must be thread-safe - as it currently uses the MainThread event loop for QTimer single shots,
 //       it is not the case.
 
+// Private default constructor.
+Boxee::Boxee()
+{
+    // Connects the NetServer onNetMessage for Boxee to relay to interested parties outside 'core'.
+    connect(&_netServer, &BoxeeNetServer::onNetMessage, [this](const model::NetMessage &netMsg) {
+        emit(onNetMessage(netMsg));
+    });
+}
+
 Boxee &Boxee::instance()
 {
-    static Boxee m_instance;
-    return m_instance;
+    static Boxee _instance;
+    return _instance;
 }
 
 void Boxee::setPassword(const QString &password)

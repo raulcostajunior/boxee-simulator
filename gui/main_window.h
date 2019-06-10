@@ -7,6 +7,8 @@ class QLabel;
 class QTableView;
 class QToolBar;
 
+class LogView;
+
 #include <QMainWindow>
 #include <QObject>
 
@@ -39,14 +41,14 @@ private:
 
     QDockWidget *dockLog;
     QMainWindow *winLog;
-    QTableView *tblLog;
+    LogView *tblLog;
     QToolBar *toolbLog;
 
     void initActions();
     void initStatusBar();
     void initLogPanel();
 
-    void connectBoxeeSignals();
+    void connectSignals();
 
     void updateActions();
     void updateStatusBar();

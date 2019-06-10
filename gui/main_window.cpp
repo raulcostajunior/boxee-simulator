@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     updateActions();
     updateStatusBar();
 
-    connectBoxeeSignals();
+    connectSignals();
 
     setWindowTitle(tr("Boxee Simulator (%1)").arg(Boxee::instance().boxeeAddress()));
 
@@ -38,19 +38,22 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::connectBoxeeSignals()
+void MainWindow::connectSignals()
 {
     connect(&Boxee::instance(), &Boxee::stateChanged, [this](Boxee::State) {
         this->updateActions();
         this->updateStatusBar();
     });
+
+    connect(tblLog, &LogView::logChanged, [this] { this->updateActions(); });
 }
 
 void MainWindow::initActions()
 {
     connect(ui->actionPower_On_Off, &QAction::triggered, this, &MainWindow::onPowerOnOff);
-    connect(ui->actionQuit, &QAction::triggered, [this]() { this->close(); });
-    connect(ui->actionAbout_Qt, &QAction::triggered, []() { qApp->aboutQt(); });
+    connect(ui->actionQuit, &QAction::triggered, [this] { this->close(); });
+    connect(ui->actionAbout_Qt, &QAction::triggered, [] { qApp->aboutQt(); });
+    connect(ui->actionClear, &QAction::triggered, [this] { this->tblLog->clearLog(); });
 }
 
 void MainWindow::updateActions()
@@ -77,6 +80,9 @@ void MainWindow::updateActions()
     ui->actionRight->setEnabled(frontFaceBtnsEnabled);
     ui->actionMenu->setEnabled(frontFaceBtnsEnabled);
     ui->actionEnter->setEnabled(frontFaceBtnsEnabled);
+
+    ui->actionClear->setEnabled(!tblLog->isEmpty());
+    ui->actionSave_As->setEnabled(!tblLog->isEmpty());
 
     ui->actionPlay_Pause->setEnabled(frontFaceBtnsEnabled && currMedia != Boxee::MediaType::NONE);
     if (currState == Boxee::State::ON_MEDIA_PLAYING) {
