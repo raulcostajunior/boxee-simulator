@@ -21,9 +21,6 @@ enum class NetMessageDirection : uint8_t {
 
 struct NetMessage
 {
-    // TODO: make all the data fields read-only; they must be ctor initialized;
-    // TODO: provide a ctor with all fields, and one with all except dateTime (initializes with current datetime).
-    // TODO: investigate the copy behavior of QDateTime and of QString (any need to define copy operators in here?)
     QDateTime dateTime;
     NetMessageType type;
     NetMessageDirection direction;
