@@ -3,7 +3,6 @@
 #include "model/net_message.h"
 
 #include <cstdint>
-#include <mutex>
 #include <QByteArray>
 #include <QCryptographicHash>
 #include <QDebug>
@@ -24,22 +23,30 @@ BoxeeNetServer::BoxeeNetServer()
     : _scanSocket(new QUdpSocket(this))
 {}
 
+BoxeeNetServer::~BoxeeNetServer()
+{
+    if (_scanListening) {
+        _scanSocket->close();
+    }
+
+    if (_requestListening) {
+        // TODO: close request socket
+    }
+}
+
 const QString &BoxeeNetServer::password() const
 {
-    std::lock_guard<std::mutex> lock(_listenParamMutex);
     return _password;
 }
 
 uint16_t BoxeeNetServer::httpPort() const
 {
-    std::lock_guard<std::mutex> lock(_listenParamMutex);
     return _httpPort;
 }
 
 void BoxeeNetServer::setHttpPort(uint16_t port)
 {
     if (port != _httpPort) {
-        std::lock_guard<std::mutex> lock(_listenParamMutex);
 
         bool restartRequestListening = _requestListening;
         bool restartScanListening = _scanListening;
@@ -62,7 +69,6 @@ void BoxeeNetServer::setHttpPort(uint16_t port)
 void BoxeeNetServer::setPassword(const QString &pwd)
 {
     if (pwd != _password) {
-        std::lock_guard<std::mutex> lock(_listenParamMutex);
 
         bool restartRequestListening = _requestListening;
         bool restartScanListening = _scanListening;

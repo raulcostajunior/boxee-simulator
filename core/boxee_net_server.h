@@ -20,6 +20,8 @@ class BoxeeNetServer : public QObject
 public:
     BoxeeNetServer();
 
+    ~BoxeeNetServer();
+
     void startScanListener();
 
     void stopScanListener();
@@ -40,7 +42,6 @@ signals:
     void onNetMessage(const model::NetMessage &);
 
 private:
-    mutable std::mutex _listenParamMutex;
     QString _password; // QStrings are default initialized to the empty string.
     uint16_t _httpPort{8080};
 
