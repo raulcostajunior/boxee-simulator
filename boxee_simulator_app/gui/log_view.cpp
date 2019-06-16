@@ -17,7 +17,7 @@ LogView::LogView(QWidget *parent)
 {
     setColumnCount(4);
     setHorizontalHeaderLabels(QStringList() << tr("Time") << tr("Remote") << tr("Message Type")
-                                            << tr("Message Body"));
+                                            << tr("Request Path / Message Body"));
     horizontalHeader()->setStretchLastSection(true);
 
     setAlternatingRowColors(true);

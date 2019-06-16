@@ -12,8 +12,13 @@
 #include <QUdpSocket>
 #include <QXmlStreamReader>
 
+#include "qhttpserver.hpp"
+#include "qhttpserverrequest.hpp"
+#include "qhttpserverresponse.hpp"
+
 using namespace core;
 using namespace model;
+using namespace qhttp::server;
 
 const uint16_t BoxeeNetServer::kBoxeeScanPort = 2562;
 const QString BoxeeNetServer::kBoxeeSharedKey("b0xeeRem0tE!");
@@ -21,6 +26,7 @@ const QString BoxeeNetServer::kBoxeeResponseChallenge("b0xeeResp0nsE");
 
 BoxeeNetServer::BoxeeNetServer()
     : _scanSocket(new QUdpSocket(this))
+    , _httpServer(new QHttpServer(this))
 {}
 
 BoxeeNetServer::~BoxeeNetServer()
@@ -30,7 +36,7 @@ BoxeeNetServer::~BoxeeNetServer()
     }
 
     if (_requestListening) {
-        // TODO: close request socket
+        _httpServer->stopListening();
     }
 }
 
@@ -104,15 +110,38 @@ void BoxeeNetServer::stopScanListener()
 
 void BoxeeNetServer::startRequestListener()
 {
-    // TODO: add method body
+    _httpServer->listen(QHostAddress::Any, _httpPort, [this](QHttpRequest *req, QHttpResponse *resp) {
+        req->collectData();
 
+        // Emits signal for request received.
+        NetMessage request;
+        request.dateTime = QDateTime::currentDateTime();
+        request.type = NetMessageType::CMD;
+        request.direction = NetMessageDirection::FROM_REMOTE;
+        request.boxeeRemoteName = req->remoteAddress();
+        request.payload = req->url().toString(); //req->collectedData().constData();
+        emit(onNetMessage(request));
+
+        // TODO: Handle request properly and send appropriate response.
+        const QString respPayload("Hello from BoxeeSim!");
+        resp->setStatusCode(qhttp::ESTATUS_OK);
+        resp->end(QByteArray(respPayload.toUtf8()));
+
+        // Emits signal for request reply sent.
+        NetMessage reqReply;
+        reqReply.dateTime = QDateTime::currentDateTime();
+        reqReply.type = NetMessageType::CMD;
+        reqReply.direction = NetMessageDirection::TO_REMOTE;
+        reqReply.boxeeRemoteName = req->remoteAddress();
+        reqReply.payload = respPayload;
+        emit(onNetMessage(reqReply));
+    });
     _requestListening = true;
 }
 
 void BoxeeNetServer::stopRequestListener()
 {
-    // TODO: add method body
-
+    _httpServer->stopListening();
     _requestListening = false;
 }
 

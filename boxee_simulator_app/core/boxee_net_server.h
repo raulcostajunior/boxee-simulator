@@ -8,6 +8,7 @@
 #include <QString>
 
 #include "model/net_message.h"
+#include "qhttpserver.hpp"
 
 class QUdpSocket;
 
@@ -49,6 +50,7 @@ private:
     bool _requestListening = false;
 
     QUdpSocket *_scanSocket;
+    qhttp::server::QHttpServer *_httpServer;
 
     /**
      * @brief Processes a datagram that is supposedly a scan request sent by an instance of a Boxee Remote
@@ -61,7 +63,10 @@ private:
 
     bool isScanDatagramValid(const QString &payload) const;
 
-    // TODO: add http request handler
+    // TODO: add request handler delegate - it can be a class on its own or simply a method of the Boxee;
+    //       If it comes to a point where the Boxee class gets too big (or with too many responsabilities)
+    //       the delegate should be a class on its own, instantiated by the boxee and passed to the Boxee
+    //       Net Server at construction time.
 
     static const uint16_t kBoxeeScanPort;
     static const QString kBoxeeSharedKey;
