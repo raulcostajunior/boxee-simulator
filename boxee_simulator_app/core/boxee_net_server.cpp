@@ -113,12 +113,15 @@ void BoxeeNetServer::startRequestListener()
     _httpServer->listen(QHostAddress::Any, _httpPort, [this](QHttpRequest *req, QHttpResponse *resp) {
         req->collectData();
 
+        const auto remoteAddr = QHostAddress(req->remoteAddress());
+        const QString remoteIp = QHostAddress(remoteAddr.toIPv4Address()).toString();
+
         // Emits signal for request received.
         NetMessage request;
         request.dateTime = QDateTime::currentDateTime();
         request.type = NetMessageType::CMD;
         request.direction = NetMessageDirection::FROM_REMOTE;
-        request.boxeeRemoteName = req->remoteAddress();
+        request.boxeeRemoteName = remoteIp;
         request.payload = req->url().toString(); //req->collectedData().constData();
         emit(onNetMessage(request));
 
@@ -132,7 +135,7 @@ void BoxeeNetServer::startRequestListener()
         reqReply.dateTime = QDateTime::currentDateTime();
         reqReply.type = NetMessageType::CMD;
         reqReply.direction = NetMessageDirection::TO_REMOTE;
-        reqReply.boxeeRemoteName = req->remoteAddress();
+        reqReply.boxeeRemoteName = remoteIp;
         reqReply.payload = respPayload;
         emit(onNetMessage(reqReply));
     });
