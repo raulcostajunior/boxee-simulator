@@ -48,11 +48,14 @@ public:
 
     uint8_t shutdownTimeSecs() const { return _shutdownTimeSecs; }
 
+    bool showBootVideo() const { return _showBootVideo; }
+    void setShowBootVideo(const bool showBoot) { _showBootVideo = showBoot; }
+
     const QString &password() const { return _netServer.password(); }
     void setPassword(const QString &);
 
     uint16_t httpPort() const { return _netServer.httpPort(); }
-    void setHttpPort(uint16_t);
+    void setHttpPort(const uint16_t);
 
     State state() const { return _state; }
 
@@ -91,6 +94,8 @@ private:
 
     uint8_t _bootTimeSecs = 3;
     uint8_t _shutdownTimeSecs = 2;
+
+    bool _showBootVideo = true;
 
     // State changes should be called internally by higher level public methods like playVideo, promptForText, ... Those methods should be called primarly by screen controllers.
     // The Boxee FSM should be kept internal to this class.

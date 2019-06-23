@@ -5,11 +5,11 @@
 #include <QToolBar>
 
 #include "core/boxee.h"
-#include "log_view.h"
-#include "main_window.h"
-#include "ui_main_window.h"
-
+#include "gui/log_view.h"
+#include "gui/main_window.h"
+#include "gui/preferences_dialog.h"
 #include "model/net_message.h"
+#include "ui_main_window.h"
 
 using namespace gui;
 using namespace core;
@@ -54,6 +54,10 @@ void MainWindow::initActions()
     connect(ui->actionQuit, &QAction::triggered, [this] { this->close(); });
     connect(ui->actionAbout_Qt, &QAction::triggered, [] { qApp->aboutQt(); });
     connect(ui->actionClear, &QAction::triggered, [this] { this->tblLog->clearLog(); });
+    connect(ui->actionSettings, &QAction::triggered, [this] {
+        PreferencesDialog dlg(this);
+        dlg.exec();
+    });
 }
 
 void MainWindow::updateActions()
@@ -141,6 +145,7 @@ void MainWindow::loadSettings()
 
     Boxee::instance().setHttpPort(static_cast<uint16_t>(settings.value("httpPort", 8080).toInt()));
     Boxee::instance().setPassword(settings.value("password", "").toString());
+    Boxee::instance().setShowBootVideo(settings.value("showBootVideo", true).toBool());
     restoreGeometry(settings.value("mainWinGeometry").toByteArray());
 }
 
@@ -150,6 +155,7 @@ void MainWindow::saveSettings()
 
     settings.setValue("httpPort", Boxee::instance().httpPort());
     settings.setValue("password", Boxee::instance().password());
+    settings.setValue("showBootVideo", Boxee::instance().showBootVideo());
     settings.setValue("mainWinGeometry", saveGeometry());
 }
 

@@ -27,6 +27,7 @@ CONFIG += c++11 c++14 #c++14 is required by qhttp - it also requires c++11 on Ma
 SOURCES += \
         core/boxee_net_server.cpp \
         gui/log_view.cpp \
+        gui/preferences_dialog.cpp \
         main.cpp \
         gui/main_window.cpp \
         core/boxee.cpp \
@@ -37,10 +38,12 @@ HEADERS += \
         gui/main_window.h \
         core/boxee.h \
         core/boxee_net_server.h \
+        gui/preferences_dialog.h \
         model/net_message.h
 
 FORMS += \
-    gui/main_window.ui
+    gui/main_window.ui \
+    gui/preferences_dialog.ui
 
 QHTTP_DIR = ../3rdparty/qhttp
 

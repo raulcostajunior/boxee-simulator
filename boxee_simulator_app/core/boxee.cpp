@@ -32,7 +32,7 @@ void Boxee::setPassword(const QString &password)
     _netServer.setPassword(password);
 }
 
-void Boxee::setHttpPort(uint16_t httpPort)
+void Boxee::setHttpPort(const uint16_t httpPort)
 {
     _netServer.setHttpPort(httpPort);
 }
