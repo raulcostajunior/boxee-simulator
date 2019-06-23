@@ -56,7 +56,9 @@ void MainWindow::initActions()
     connect(ui->actionClear, &QAction::triggered, [this] { this->tblLog->clearLog(); });
     connect(ui->actionSettings, &QAction::triggered, [this] {
         PreferencesDialog dlg(this);
-        dlg.exec();
+        if (dlg.exec() == QDialog::Accepted) {
+            this->saveSettings();
+        }
     });
 }
 
@@ -131,11 +133,6 @@ void MainWindow::initStatusBar()
 void MainWindow::updateStatusBar()
 {   
     lblBoxeeState->setText(core::Boxee::instance().stateAsString());
-}
-
-void MainWindow::closeEvent(QCloseEvent *)
-{
-    saveSettings();
 }
 
 void MainWindow::loadSettings()
