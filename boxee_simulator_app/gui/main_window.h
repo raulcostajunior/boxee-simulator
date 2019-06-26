@@ -35,6 +35,8 @@ private:
 
     QLabel *lblLogEntries;
     QLabel *lblBoxeeState;
+    QLabel *lblBoxeeAddr;
+    QLabel *lblBoxeePort;
 
     QDockWidget *dockLog;
     QMainWindow *winLog;

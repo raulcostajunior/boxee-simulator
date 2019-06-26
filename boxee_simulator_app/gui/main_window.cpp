@@ -124,6 +124,14 @@ void MainWindow::initLogPanel()
 
 void MainWindow::initStatusBar()
 {
+    lblBoxeeAddr = new QLabel("Address 255.255.255:65545");
+    lblBoxeeAddr->setMinimumSize(lblBoxeeAddr->sizeHint());
+    ui->statusBar->addPermanentWidget(lblBoxeeAddr);
+
+    lblBoxeePort = new QLabel("Port 65545");
+    lblBoxeePort->setMinimumSize(lblBoxeePort->sizeHint());
+    ui->statusBar->addPermanentWidget(lblBoxeePort);
+
     lblBoxeeState = new QLabel("                       ");
     lblBoxeeState->setMinimumSize(lblBoxeeState->sizeHint());
     lblBoxeeState->setAlignment(Qt::AlignCenter);
