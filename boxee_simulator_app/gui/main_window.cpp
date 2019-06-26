@@ -28,8 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connectSignals();
 
-    setWindowTitle(tr("Boxee Simulator (%1)").arg(Boxee::instance().boxeeAddress()));
-
     loadSettings();
 }
 
@@ -124,12 +122,14 @@ void MainWindow::initLogPanel()
 
 void MainWindow::initStatusBar()
 {
-    lblBoxeeAddr = new QLabel("Address 255.255.255:65545");
+    lblBoxeeAddr = new QLabel("Address 255.255.255");
     lblBoxeeAddr->setMinimumSize(lblBoxeeAddr->sizeHint());
+    lblBoxeeAddr->setAlignment(Qt::AlignCenter);
     ui->statusBar->addPermanentWidget(lblBoxeeAddr);
 
     lblBoxeePort = new QLabel("Port 65545");
     lblBoxeePort->setMinimumSize(lblBoxeePort->sizeHint());
+    lblBoxeePort->setAlignment(Qt::AlignCenter);
     ui->statusBar->addPermanentWidget(lblBoxeePort);
 
     lblBoxeeState = new QLabel("                       ");
@@ -139,8 +139,18 @@ void MainWindow::initStatusBar()
 }
 
 void MainWindow::updateStatusBar()
-{   
+{
     lblBoxeeState->setText(core::Boxee::instance().stateAsString());
+
+    Boxee::State curState = Boxee::instance().state();
+    if (curState != Boxee::State::OFF && curState != Boxee::State::SHUTTING_DOWN
+        && curState != Boxee::State::BOOTING) {
+        lblBoxeeAddr->setText(tr("Address: %1").arg(Boxee::instance().boxeeAddress()));
+        lblBoxeePort->setText(tr("Port: %1").arg(Boxee::instance().httpPort()));
+    } else {
+        lblBoxeeAddr->setText("");
+        lblBoxeePort->setText("");
+    }
 }
 
 void MainWindow::loadSettings()
