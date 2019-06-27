@@ -55,6 +55,7 @@ void MainWindow::initActions()
     connect(ui->actionSettings, &QAction::triggered, [this] {
         PreferencesDialog dlg(this);
         if (dlg.exec() == QDialog::Accepted) {
+            this->updateStatusBar();
             this->saveSettings();
         }
     });
