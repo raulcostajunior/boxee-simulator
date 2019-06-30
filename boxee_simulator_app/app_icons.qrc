@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>icons/dark/actions/symbolic/system-shutdown.svg</file>
-        <file>icons/dark/index.theme</file>
-        <file>icons/light/actions/symbolic/system-shutdown.svg</file>
-        <file>icons/light/index.theme</file>
-    </qresource>
-</RCC>

@@ -26,6 +26,7 @@ CONFIG += c++11 c++14 #c++14 is required by qhttp - it also requires c++11 on Ma
 
 SOURCES += \
         core/boxee_net_server.cpp \
+        core/virtual_remote.cpp \
         gui/log_view.cpp \
         gui/preferences_dialog.cpp \
         main.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
         model/net_message.cpp
 
 HEADERS += \
+        core/virtual_remote.h \
         gui/log_view.h \
         gui/main_window.h \
         core/boxee.h \
@@ -61,4 +63,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     images.qrc
 
-QMAKE_INFO_PLIST = macosx/Info.plist
+QMAKE_INFO_PLIST = darwin/Contents/Info.plist
+
+DISTFILES += \
+    darwin/Contents/Info.plist \
+    darwin/Contents/Resources/appIcon.icns

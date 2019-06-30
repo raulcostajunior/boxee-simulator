@@ -5,6 +5,7 @@
 #include <QToolBar>
 
 #include "core/boxee.h"
+#include "core/virtual_remote.h"
 #include "gui/log_view.h"
 #include "gui/main_window.h"
 #include "gui/preferences_dialog.h"
@@ -58,6 +59,17 @@ void MainWindow::initActions()
             this->updateStatusBar();
             this->saveSettings();
         }
+    });
+
+    // VirtualRemote actions
+    connect(ui->actionUp, &QAction::triggered, [] { VirtualRemote::instance().sendUp(); });
+    connect(ui->actionRight, &QAction::triggered, [] { VirtualRemote::instance().sendRight(); });
+    connect(ui->actionDown, &QAction::triggered, [] { VirtualRemote::instance().sendDown(); });
+    connect(ui->actionLeft, &QAction::triggered, [] { VirtualRemote::instance().sendLeft(); });
+    connect(ui->actionEnter, &QAction::triggered, [] { VirtualRemote::instance().sendEnter(); });
+    connect(ui->actionMenu, &QAction::triggered, [] { VirtualRemote::instance().sendMenu(); });
+    connect(ui->actionPlay_Pause, &QAction::triggered, [] {
+        VirtualRemote::instance().sendPlayPause();
     });
 }
 
