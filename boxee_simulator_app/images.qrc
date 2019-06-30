@@ -13,6 +13,6 @@
         <file>images/save-as.png</file>
         <file>images/up.png</file>
         <file>images/power-off.png</file>
-        <file>images/appIcon.png</file>
+        <file>images/appIcon_256.png</file>
     </qresource>
 </RCC>

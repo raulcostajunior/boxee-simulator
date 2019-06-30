@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     loadSettings();
 
-    setWindowIcon(QIcon(":/images/appIcon.png"));
+    setWindowIcon(QIcon(":/images/appIcon_256.png"));
 }
 
 MainWindow::~MainWindow()
