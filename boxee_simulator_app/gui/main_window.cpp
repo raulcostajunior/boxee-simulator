@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connectSignals();
 
     loadSettings();
+
+    setWindowIcon(QIcon(":/images/appIcon.png"));
 }
 
 MainWindow::~MainWindow()
