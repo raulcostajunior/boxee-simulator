@@ -25,22 +25,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11 c++14 #c++14 is required by qhttp - it also requires c++11 on MacOS.
 
 SOURCES += \
+        core/audio_controller.cpp \
         core/boxee_net_server.cpp \
+        core/image_gallery_controller.cpp \
+        core/media_manager.cpp \
+        core/video_controller.cpp \
         core/virtual_remote.cpp \
+        gui/display_controller.cpp \
         gui/log_view.cpp \
         gui/preferences_dialog.cpp \
+        gui/text_input_control.cpp \
         main.cpp \
         gui/main_window.cpp \
         core/boxee.cpp \
         model/net_message.cpp
 
 HEADERS += \
+        core/audio_controller.h \
+        core/image_gallery_controller.h \
+        core/media_manager.h \
+        core/video_controller.h \
         core/virtual_remote.h \
+        gui/display_controller.h \
         gui/log_view.h \
         gui/main_window.h \
         core/boxee.h \
         core/boxee_net_server.h \
         gui/preferences_dialog.h \
+        gui/text_input_control.h \
         model/net_message.h
 
 FORMS += \

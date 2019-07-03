@@ -10,6 +10,11 @@
 
 namespace core {
 
+// TODO: add parameters to be setable by the media playing controller classes that
+//       give the length of the media being currently played, the position in the
+//       execution, the media resource name and the current playing status (playing,
+//       paused, stopped, ....)
+
 class Boxee : public QObject
 {
     Q_OBJECT
