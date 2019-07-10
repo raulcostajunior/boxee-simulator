@@ -7,7 +7,7 @@ TEMPLATE  = lib
 PRJDIR    = ..
 include($$PRJDIR/commondir.pri)
 
-CONFIG  += staticlib
+!win32:CONFIG  += staticlib
 
 DEFINES       *= QHTTP_MEMORY_LOG=0
 win32:DEFINES *= QHTTP_EXPORT
