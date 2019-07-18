@@ -137,20 +137,21 @@ void MainWindow::initLogPanel()
 
 void MainWindow::initStatusBar()
 {
-    lblBoxeeAddr = new QLabel("Address 255.255.255");
+    lblBoxeeAddr = new QLabel("  Address 255.255.255.255  ");
     lblBoxeeAddr->setMinimumSize(lblBoxeeAddr->sizeHint());
     lblBoxeeAddr->setAlignment(Qt::AlignCenter);
     ui->statusBar->addPermanentWidget(lblBoxeeAddr);
 
-    lblBoxeePort = new QLabel("Port 65545");
+    lblBoxeePort = new QLabel("  Port 65545  ");
     lblBoxeePort->setMinimumSize(lblBoxeePort->sizeHint());
     lblBoxeePort->setAlignment(Qt::AlignCenter);
     ui->statusBar->addPermanentWidget(lblBoxeePort);
 
-    lblBoxeeState = new QLabel("                       ");
+    lblBoxeeState = new QLabel(" ");
     lblBoxeeState->setMinimumSize(lblBoxeeState->sizeHint());
-    lblBoxeeState->setAlignment(Qt::AlignCenter);
-    ui->statusBar->addPermanentWidget(lblBoxeeState);
+    lblBoxeeState->setAlignment(Qt::AlignLeft);
+    lblBoxeeState->setIndent(8);
+    ui->statusBar->addWidget(lblBoxeeState, 1);
 }
 
 void MainWindow::updateStatusBar()
@@ -171,7 +172,6 @@ void MainWindow::updateStatusBar()
 void MainWindow::loadSettings()
 {
     QSettings settings("cyncrun", "BoxeeSimulator");
-    qDebug() << settings.fileName();
 
     Boxee::instance().setHttpPort(static_cast<uint16_t>(settings.value("httpPort", 8080).toInt()));
     Boxee::instance().setPassword(settings.value("password", "").toString());
