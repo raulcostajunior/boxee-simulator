@@ -197,7 +197,7 @@ void BoxeeNetServer::processScanDatagrams()
             // since Qt5 it will be an IPv6 address with the string prefix "::ffff:".
             scanReply.boxeeRemoteName
                 = QString("%1:%2").arg(QHostAddress(senderAddrV4).toString()).arg(senderPort);
-            scanReply.payload = payload;
+            scanReply.payload = respPayload;
             emit(onNetMessage(scanReply));
 
         } else {
