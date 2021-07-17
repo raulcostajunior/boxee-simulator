@@ -226,13 +226,13 @@ bool BoxeeNetServer::isScanDatagramValid(const QString &payload) const
         if (reader.hasError())
             validPayload = false;
         else if (reader.readNext() == QXmlStreamReader::StartElement) {
-            if (reader.name() == "BDP1") {
+            if (reader.name().toString() == "BDP1") {
                 validPayload = (reader.attributes().hasAttribute("cmd")
-                                && reader.attributes().value("cmd") == "discover");
+                                && reader.attributes().value("cmd").toString() == "discover");
                 if (!validPayload)
                     continue;
                 validPayload = (reader.attributes().hasAttribute("application")
-                                && reader.attributes().value("application") == "iphone_remote");
+                                && reader.attributes().value("application").toString() == "iphone_remote");
                 if (!validPayload)
                     continue;
                 validPayload = reader.attributes().hasAttribute("challenge");
