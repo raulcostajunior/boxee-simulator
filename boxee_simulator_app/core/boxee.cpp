@@ -17,7 +17,7 @@ Boxee::Boxee()
 {
     // Connects the NetServer onNetMessage for Boxee to relay to interested parties outside 'core'.
     connect(&_netServer, &BoxeeNetServer::onNetMessage, [this](const model::NetMessage &netMsg) {
-        emit(onNetMessage(netMsg));
+        emit onNetMessage(netMsg);
     });
 }
 
@@ -41,7 +41,7 @@ void Boxee::setState(State state)
 {
     if (state != _state) {
         _state = state;
-        emit(stateChanged(_state));
+        emit stateChanged(_state);
     }
 }
 
@@ -85,7 +85,7 @@ void Boxee::setMediaType(MediaType mediaType)
 {
     if (mediaType != _mediaType) {
         _mediaType = mediaType;
-        emit(mediaTypeChanged(_mediaType));
+        emit mediaTypeChanged(_mediaType);
     }
 }
 
@@ -98,7 +98,7 @@ void Boxee::powerOn()
 
     setState(State::BOOTING);
 
-    QTimer::singleShot(_bootTimeSecs * 1000, [this] {
+    QTimer::singleShot(_bootTimeSecs * 1000, this, [this] {
         setState(State::ON_STANDARD);
         _netServer.startScanListener();
         _netServer.startRequestListener();
@@ -113,7 +113,7 @@ void Boxee::powerOff()
 
     setState(State::SHUTTING_DOWN);
 
-    QTimer::singleShot(_shutdownTimeSecs * 1000, [this] {
+    QTimer::singleShot(_shutdownTimeSecs * 1000, this, [this] {
         setState(State::OFF);
         _netServer.stopScanListener();
         _netServer.stopRequestListener();
